@@ -1,0 +1,150 @@
+version: '3.8'
+
+services:
+  # RabbitMQ for messaging
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"     # AMQP protocol
+      - "15672:15672"   # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  # MongoDB instances for services using Mongo
+  mongo-user:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_user_data:/data/db
+
+  mongo-movie:
+    image: mongo
+    volumes:
+      - mongo_movie_data:/data/db
+
+  mongo-genre:
+    image: mongo
+    volumes:
+      - mongo_genre_data:/data/db
+
+  mongo-rating:
+    image: mongo
+    volumes:
+      - mongo_rating_data:/data/db
+
+  # PostgreSQL instances for services using Postgres
+  postgres-review:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: reviewdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_review_data:/var/lib/postgresql/data
+
+  postgres-history:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: historydb
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_history_data:/var/lib/postgresql/data
+
+  # User Service (MongoDB)
+  user-service:
+    build: ./user-service
+    depends_on:
+      - rabbitmq
+      - mongo-user
+    environment:
+      - PORT=4000
+      - MONGO_URL=mongodb://mongo-user:27017/userdb
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - "4000:4000"
+
+  # Movie Service (MongoDB)
+  movie-service:
+    build: ./movie-service
+    depends_on:
+      - rabbitmq
+      - mongo-movie
+    environment:
+      - PORT=4001
+      - MONGO_URL=mongodb://mongo-movie:27017/moviedb
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - "4001:4001"
+
+  # Genre Service (MongoDB)
+  genre-service:
+    build: ./genre-service
+    depends_on:
+      - rabbitmq
+      - mongo-genre
+    environment:
+      - PORT=4002
+      - MONGO_URL=mongodb://mongo-genre:27017/genredb
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - "4002:4002"
+
+  # Review Service (PostgreSQL)
+  review-service:
+    build: ./review-service
+    depends_on:
+      - rabbitmq
+      - postgres-review
+    environment:
+      - PORT=4003
+      - POSTGRES_HOST=postgres-review
+      - POSTGRES_DB=reviewdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgrespassword
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - "4003:4003"
+
+  # Rating Service (MongoDB)
+  rating-service:
+    build: ./rating-service
+    depends_on:
+      - rabbitmq
+      - mongo-rating
+    environment:
+      - PORT=4004
+      - MONGO_URL=mongodb://mongo-rating:27017/ratingdb
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - "4004:4004"
+
+  # History Service (PostgreSQL)
+  history-service:
+    build: ./history-service
+    depends_on:
+      - rabbitmq
+      - postgres-history
+    environment:
+      - PORT=4005
+      - POSTGRES_HOST=postgres-history
+      - POSTGRES_DB=historydb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgrespassword
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - "4005:4005"
+
+volumes:
+  mongo_user_data:
+  mongo_movie_data:
+  mongo_genre_data:
+  mongo_rating_data:
+  pg_review_data:
+  pg_history_data:

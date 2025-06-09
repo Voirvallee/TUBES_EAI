@@ -1,0 +1,62 @@
+"""
+Represents a user's rating for a specific movie.
+"""
+type Rating {
+  """
+  Unique identifier for the rating record.
+  """
+  id: ID!
+
+  """
+  ID of the user who submitted the rating.
+  """
+  userId: ID!
+
+  """
+  ID of the movie that was rated.
+  """
+  movieId: ID!
+
+  """
+  The rating value given by the user (e.g., on a scale like 1-5).
+  """
+  rating: Int!
+
+  """
+  Timestamp when the rating was created (ISO 8601 string).
+  """
+  createdAt: String
+
+  """
+  Timestamp when the rating was last updated (ISO 8601 string).
+  """
+  updatedAt: String
+}
+
+type Query {
+  """
+  Retrieve all ratings.
+  Returns an array of Rating objects.
+  """
+  ratings: [Rating!]!
+
+  """
+  Retrieve the rating given by a specific user for a specific movie.
+  Returns the Rating object if found, else null.
+  """
+  rating(userId: ID!, movieId: ID!): Rating
+}
+
+type Mutation {
+  """
+  Add a new rating or update an existing rating for a movie by a user.
+
+  Parameters:
+  - userId: ID of the user submitting the rating (required).
+  - movieId: ID of the movie to rate (required).
+  - rating: Rating value (required).
+
+  Returns the newly created or updated Rating object.
+  """
+  addOrUpdateRating(userId: ID!, movieId: ID!, rating: Int!): Rating!
+}

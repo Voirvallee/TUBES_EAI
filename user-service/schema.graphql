@@ -1,0 +1,46 @@
+"""
+Represents a user with identification, contact, and registration info.
+"""
+type User {
+  """
+  Unique identifier for the user.
+  """
+  id: ID!
+
+  """
+  Full name of the user.
+  """
+  name: String!
+
+  """
+  Email address of the user.
+  """
+  email: String!
+
+  """
+  Timestamp of when the user registered (ISO 8601 format).
+  """
+  registeredAt: String!
+}
+
+type Query {
+  """
+  Retrieve a list of all users.
+  Returns an array of User objects.
+  """
+  users: [User!]!
+
+  """
+  Retrieve a single user by their unique ID.
+  Returns the User object if found, else null.
+  """
+  user(id: ID!): User
+}
+
+type Mutation {
+  """
+  Register a new user with a name and email.
+  Returns the newly created User object.
+  """
+  registerUser(name: String!, email: String!): User!
+}

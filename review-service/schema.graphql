@@ -1,0 +1,56 @@
+"""
+Represents a review submitted by a user for a specific movie.
+"""
+type Review {
+  """
+  Unique identifier for the review.
+  """
+  id: ID!
+
+  """
+  ID of the user who wrote the review.
+  """
+  userId: ID!
+
+  """
+  ID of the movie being reviewed.
+  """
+  movieId: ID!
+
+  """
+  The content/text of the review.
+  """
+  content: String
+
+  """
+  Timestamp when the review was created or submitted (ISO 8601 string).
+  """
+  timestamp: String
+}
+
+type Query {
+  """
+  Retrieve all reviews.
+  Returns a list of Review objects.
+  """
+  reviews: [Review!]!
+
+  """
+  Retrieve a single review by its ID.
+  """
+  review(id: ID!): Review
+}
+
+type Mutation {
+  """
+  Add a new review for a movie by a user.
+
+  Parameters:
+  - userId: ID of the user submitting the review (required).
+  - movieId: ID of the movie being reviewed (required).
+  - content: Text content of the review (optional).
+
+  Returns the newly created Review object.
+  """
+  addReview(userId: ID!, movieId: ID!, content: String): Review!
+}

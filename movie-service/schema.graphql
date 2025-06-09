@@ -1,0 +1,46 @@
+"""
+Represents a movie with basic details.
+"""
+type Movie {
+  """
+  Unique identifier for the movie.
+  """
+  id: ID!
+
+  """
+  Title of the movie.
+  """
+  title: String!
+
+  """
+  A brief description or synopsis of the movie.
+  """
+  description: String
+
+  """
+  The release date of the movie (ISO 8601 date string).
+  """
+  releaseDate: String
+}
+
+type Query {
+  """
+  Retrieve a list of all movies.
+  Returns an array of Movie objects.
+  """
+  movies: [Movie!]!
+
+  """
+  Retrieve a single movie by its unique ID.
+  Returns the Movie object if found, else null.
+  """
+  movie(id: ID!): Movie
+}
+
+type Mutation {
+  """
+  Add a new movie with title, optional description, and release date.
+  Returns the newly created Movie object.
+  """
+  addMovie(title: String!, description: String, releaseDate: String): Movie!
+}
