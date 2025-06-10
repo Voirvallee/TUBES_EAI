@@ -7,11 +7,11 @@ const Review = sequelize.define("Review", {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  userId: {
+  userName: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  movieId: {
+  movieTitle: {
     type: DataTypes.STRING,
     allowNull: false,
   },

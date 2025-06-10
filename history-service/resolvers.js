@@ -9,11 +9,10 @@ const resolvers = {
       await History.findAll({ where: { userId } }),
   },
   Mutation: {
-    addHistory: async (_, { userId, movieId, watchedAt, reviewId }) => {
+    addHistory: async (_, { userId, movieId, reviewId }) => {
       const history = await History.create({
         userId,
         movieId,
-        watchedAt,
         reviewId,
       });
       await publishHistoryUpdated(history);

@@ -26,6 +26,9 @@ type Review {
   Timestamp when the review was created or submitted (ISO 8601 string).
   """
   timestamp: String
+
+  userName: String
+  movieTitle: String 
 }
 
 type Query {
@@ -46,11 +49,11 @@ type Mutation {
   Add a new review for a movie by a user.
 
   Parameters:
-  - userId: ID of the user submitting the review (required).
-  - movieId: ID of the movie being reviewed (required).
+  - userName: Name of the user submitting the review (required).
+  - movieTitle: Title of the movie being reviewed (required).
   - content: Text content of the review (optional).
 
   Returns the newly created Review object.
   """
-  addReview(userId: ID!, movieId: ID!, content: String): Review!
+  addReview(userName: String!, movieTitle: String!, content: String): Review!
 }
