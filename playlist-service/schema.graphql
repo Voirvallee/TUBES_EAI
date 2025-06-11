@@ -1,0 +1,69 @@
+"""
+Represents a playlist of movies owned by a user.
+"""
+type Playlist {
+  """
+  Unique identifier for the playlist.
+  """
+  id: ID!
+
+  """
+  Name of the playlist.
+  """
+  name: String!
+
+  """
+  Name of the owner/user who created the playlist.
+  """
+  ownerName: String!
+
+  """
+  List of movie names included in this playlist.
+  """
+  movieNames: [String!]!
+
+  """
+  Optional description providing more details about the playlist.
+  """
+  description: String
+}
+
+type Query {
+  """
+  Retrieve all playlists.
+  Returns an array of Playlist objects.
+  """
+  playlists: [Playlist!]!
+
+  """
+  Retrieve a single playlist by its unique ID.
+  Returns the Playlist object if found, else null.
+  """
+  playlist(id: ID!): Playlist
+}
+
+type Mutation {
+  """
+  Add a new playlist with a name, ownerName, movieNames, and optional description.
+  Returns the newly created Playlist object.
+  """
+  addPlaylist(
+    name: String!
+    ownerName: String!
+    movieNames: [String!]!
+    description: String
+  ): Playlist!
+
+  """
+  Update an existing playlist by its ID.
+  Allows updating name, ownerName, movieNames, and/or description.
+  Returns the updated Playlist object.
+  """
+  updatePlaylist(
+    id: ID!
+    name: String
+    ownerName: String
+    movieNames: [String!]
+    description: String
+  ): Playlist!
+}

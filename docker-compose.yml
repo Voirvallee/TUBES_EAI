@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   # RabbitMQ for messaging
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"     # AMQP protocol
-      - "15672:15672"   # Management UI
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -24,10 +22,10 @@ services:
     volumes:
       - mongo_movie_data:/data/db
 
-  mongo-genre:
+  mongo-playlist:
     image: mongo
     volumes:
-      - mongo_genre_data:/data/db
+      - mongo_playlist_data:/data/db
 
   mongo-rating:
     image: mongo
@@ -83,15 +81,15 @@ services:
     ports:
       - "4001:4001"
 
-  # Genre Service (MongoDB)
-  genre-service:
-    build: ./genre-service
+  # Playlist Service (MongoDB)
+  playlist-service:
+    build: ./playlist-service
     depends_on:
       - rabbitmq
-      - mongo-genre
+      - mongo-playlist
     environment:
       - PORT=4002
-      - MONGO_URL=mongodb://mongo-genre:27017/genredb
+      - MONGO_URL=mongodb://mongo-playlist:27017/playlistdb
       - RABBITMQ_URL=amqp://rabbitmq
     ports:
       - "4002:4002"
@@ -144,7 +142,7 @@ services:
 volumes:
   mongo_user_data:
   mongo_movie_data:
-  mongo_genre_data:
+  mongo_playlist_data:
   mongo_rating_data:
   pg_review_data:
   pg_history_data:
