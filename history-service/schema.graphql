@@ -1,62 +1,17 @@
-"""
-Represents a record of a user watching a movie, optionally linked to a review.
-"""
 type History {
-  """
-  Unique identifier for the history record.
-  """
   id: ID!
-
-  """
-  ID of the user who watched the movie.
-  """
-  userId: ID!
-
-  """
-  ID of the movie that was watched.
-  """
-  movieId: ID!
-
-  """
-  Optional ID of the review associated with this watch history.
-  """
-  reviewId: ID
+  source: String!
+  message: String!
+  level: String!
+  createdAt: String!
+  updatedAt: String!
 }
 
 type Query {
-  """
-  Retrieve all watch history records.
-  Returns an array of History objects.
-  """
-  histories: [History!]!
-
-  """
-  Retrieve a single history record by its unique ID.
-  Returns the History object if found, else null.
-  """
-  history(id: ID!): History
-
-  """
-  Retrieve all history records for a specific user by their user ID.
-  Returns an array of History objects.
-  """
-  historiesByUser(userId: ID!): [History!]!
+  logs: [History!]!
+  logsBySource(source: String!): [History!]!
 }
 
 type Mutation {
-  """
-  Add a new watch history record.
-
-  Parameters:
-  - userId: ID of the user who watched the movie (required).
-  - movieId: ID of the movie watched (required).
-  - reviewId: Optional ID of a related review.
-
-  Returns the newly created History object.
-  """
-  addHistory(
-    userId: ID!
-    movieId: ID!
-    reviewId: ID
-  ): History!
+  addLog(source: String!, message: String!, level: String!): History!
 }

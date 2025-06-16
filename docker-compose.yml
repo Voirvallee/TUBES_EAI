@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  # RabbitMQ for messaging
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -11,7 +11,6 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
 
-  # MongoDB instances for services using Mongo
   mongo-user:
     image: mongo
     volumes:
@@ -32,7 +31,11 @@ services:
     volumes:
       - mongo_analytics_data:/data/db
 
-  # PostgreSQL instances for services using Postgres
+  mongo-history:
+    image: mongo
+    volumes:
+      - mongo_history_data:/data/db
+
   postgres-review:
     image: postgres:15
     environment:
@@ -42,16 +45,6 @@ services:
     volumes:
       - pg_review_data:/var/lib/postgresql/data
 
-  postgres-history:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: historydb
-    volumes:
-      - pg_history_data:/var/lib/postgresql/data
-
-  # User Service (MongoDB)
   user-service:
     build: ./user-service
     depends_on:
@@ -64,7 +57,6 @@ services:
     ports:
       - "4000:4000"
 
-  # Movie Service (MongoDB)
   movie-service:
     build: ./movie-service
     depends_on:
@@ -77,7 +69,6 @@ services:
     ports:
       - "4001:4001"
 
-  # Playlist Service (MongoDB)
   playlist-service:
     build: ./playlist-service
     depends_on:
@@ -90,7 +81,6 @@ services:
     ports:
       - "4002:4002"
 
-  # Review Service (PostgreSQL)
   review-service:
     build: ./review-service
     depends_on:
@@ -106,7 +96,6 @@ services:
     ports:
       - "4003:4003"
 
-  # Analytics Service (MongoDB)
   analytics-service:
     build: ./analytics-service
     depends_on:
@@ -119,18 +108,14 @@ services:
     ports:
       - "4004:4004"
 
-  # History Service (PostgreSQL)
   history-service:
     build: ./history-service
     depends_on:
       - rabbitmq
-      - postgres-history
+      - mongo-history
     environment:
       - PORT=4005
-      - POSTGRES_HOST=postgres-history
-      - POSTGRES_DB=historydb
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgrespassword
+      - MONGO_URL=mongodb://mongo-history:27017/historydb
       - RABBITMQ_URL=amqp://rabbitmq
     ports:
       - "4005:4005"
@@ -140,5 +125,5 @@ volumes:
   mongo_movie_data:
   mongo_playlist_data:
   mongo_analytics_data:
+  mongo_history_data:
   pg_review_data:
-  pg_history_data:

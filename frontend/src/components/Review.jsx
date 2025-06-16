@@ -109,7 +109,7 @@ export default function Review() {
         err.response?.data?.errors?.[0]?.message || err.message;
 
       if (errorMessage.includes("inappropriate language")) {
-        alert("Your review contains inappropriate language. Please edit it.");
+        alert("Your review contains inappropriate language. Please change it.");
       } else {
         alert("Error adding review: " + errorMessage);
       }

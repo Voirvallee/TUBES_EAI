@@ -1,22 +1,15 @@
 const History = require("./History");
-const { publishHistoryUpdated } = require("./messagePublisher");
 
 const resolvers = {
   Query: {
-    histories: async () => await History.findAll(),
-    history: async (_, { id }) => await History.findByPk(id),
-    historiesByUser: async (_, { userId }) =>
-      await History.findAll({ where: { userId } }),
+    logs: async () => await History.find().sort({ createdAt: -1 }),
+    logsBySource: async (_, { source }) =>
+      await History.find({ source }).sort({ createdAt: -1 }),
   },
   Mutation: {
-    addHistory: async (_, { userId, movieId, reviewId }) => {
-      const history = await History.create({
-        userId,
-        movieId,
-        reviewId,
-      });
-      await publishHistoryUpdated(history);
-      return history;
+    addLog: async (_, { source, message, level }) => {
+      const log = new History({ source, message, level });
+      return await log.save();
     },
   },
 };

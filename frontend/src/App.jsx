@@ -6,6 +6,7 @@ import Movie from './components/Movie'
 import Review from './components/Review'
 import Playlist from './components/Playlist'
 import Analytic from './components/Analytic'
+import History from './components/History'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Route path='/playlist' element={<Playlist />} />
           <Route path='/review' element={<Review />} />
           <Route path='/analytic' element={<Analytic />} />
+          <Route path='/history' element={<History />} />
         </Routes>
       </main>
     </>

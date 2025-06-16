@@ -24,7 +24,16 @@ export default function Playlist() {
     setError(null);
     try {
       // Fetch playlists
-      const playlistQuery = `query { playlists { id name ownerName movieNames description } }`;
+      const playlistQuery = `query { 
+        playlists { 
+          id 
+          name 
+          ownerName 
+          movieNames 
+          description 
+          createdAt 
+        } 
+      }`;
       const playlistRes = await axios.post(
         PLAYLIST_URL,
         JSON.stringify({ query: playlistQuery }),
@@ -75,7 +84,20 @@ export default function Playlist() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const mutation = `mutation($name: String!, $ownerName: String!, $movieNames: [String!]!, $description: String) { addPlaylist(name: $name, ownerName: $ownerName, movieNames: $movieNames, description: $description) { id name ownerName movieNames description } }`;
+      const mutation = `mutation($name: String!, $ownerName: String!, $movieNames: [String!]!, $description: String) { 
+        addPlaylist(
+          name: $name, 
+          ownerName: $ownerName, 
+          movieNames: $movieNames, 
+          description: $description
+        ) { 
+          id 
+          name 
+          ownerName 
+          movieNames 
+          description 
+        } 
+      }`;
 
       await axios.post(
         PLAYLIST_URL,
@@ -111,7 +133,6 @@ export default function Playlist() {
   if (loading) return <p>Loading playlists...</p>;
   if (error) return <p className="text-red-600">Error loading playlists.</p>;
 
-  // Prepare options for react-select
   const userOptions = users.map((user) => ({
     value: user.name,
     label: user.name,
@@ -200,6 +221,9 @@ export default function Playlist() {
             <th className="border border-gray-300 px-4 py-2 text-left">
               Description
             </th>
+            <th className="border border-gray-300 px-4 py-2 text-left">
+              Created At
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -219,6 +243,9 @@ export default function Playlist() {
               </td>
               <td className="border border-gray-300 px-4 py-2">
                 {playlist.description || "-"}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                {new Date(playlist.createdAt).toLocaleString()}
               </td>
             </tr>
           ))}

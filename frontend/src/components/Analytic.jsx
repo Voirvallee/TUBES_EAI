@@ -74,32 +74,32 @@ function Analytic() {
   if (error) return <p className="text-red-500">Error: {error.message}</p>;
 
   return (
-    <div className="px-6 py-10">
-      <h2 className="text-3xl font-semibold mb-6">System Analytics</h2>
+    <div className="overflow-hidden px-6 pt-10">
+      <h2 className="text-2xl font-semibold mb-6">System Analytics</h2>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-8 mb-10">
         <div className="p-4 bg-blue-100 rounded shadow">
           <h3 className="text-xl font-semibold">Total Users</h3>
-          <p className="text-3xl">{summary.totalUsers}</p>
+          <p className="text-2xl">{summary.totalUsers}</p>
         </div>
         <div className="p-4 bg-green-100 rounded shadow">
           <h3 className="text-xl font-semibold">Total Movies</h3>
-          <p className="text-3xl">{summary.totalMovies}</p>
+          <p className="text-2xl">{summary.totalMovies}</p>
         </div>
         <div className="p-4 bg-yellow-100 rounded shadow">
           <h3 className="text-xl font-semibold">Total Reviews</h3>
-          <p className="text-3xl">{summary.totalReviews}</p>
+          <p className="text-2xl">{summary.totalReviews}</p>
         </div>
         <div className="p-4 bg-purple-100 rounded shadow">
           <h3 className="text-xl font-semibold">Total Playlists</h3>
-          <p className="text-3xl">{summary.totalPlaylists}</p>
+          <p className="text-2xl">{summary.totalPlaylists}</p>
         </div>
       </div>
 
       {/* Bar Chart */}
-      <div className="mb-10">
-        <h3 className="text-2xl font-semibold mb-4">
+      <div className="mb-8">
+        <h3 className="text-2xl font-semibold mb-2">
           Top Reviewed Movies (Chart)
         </h3>
         <ResponsiveContainer width="100%" height={300}>
