@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <aside className="bg-gray-100 px-8 pt-10 h-screen">
+    <aside className="bg-gray-100 px-8 pt-10 shadow-xs shadow-gray-400 h-screen">
       <NavLink to={'/'}>
         <h1 className="text-xl font-bold mb-10">Movie Rating Project</h1>
       </NavLink>
@@ -10,9 +10,9 @@ function Sidebar() {
         {[
           { to: "/", label: "User" },
           { to: "/movie", label: "Movie" },
-          { to: "/genre", label: "Genre" },
+          { to: "/playlist", label: "Playlist" },
           { to: "/review", label: "Review" },
-          { to: "/rating", label: "Rating" },
+          { to: "/analytic", label: "Analytic" },
           { to: "/history", label: "History" },
         ].map(({ to, label }) => (
           <NavLink

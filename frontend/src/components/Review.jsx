@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Select from "react-select";
 
 const REVIEW_SERVICE_URL = "http://localhost:4003/graphql";
 const USER_SERVICE_URL = "http://localhost:4000/graphql";
@@ -102,9 +103,8 @@ export default function Review() {
         { headers: { "Content-Type": "application/json" } }
       );
       setNewReview({ userName: "", movieTitle: "", content: "" });
-      fetchInitialData(); // refresh list
+      fetchInitialData();
     } catch (err) {
-      // Check for bad language error message from backend
       const errorMessage =
         err.response?.data?.errors?.[0]?.message || err.message;
 
@@ -114,10 +114,13 @@ export default function Review() {
         alert("Error adding review: " + errorMessage);
       }
     }
-  }  
+  }
 
   if (loading) return <p className="text-gray-500">Loading reviews...</p>;
   if (error) return <p className="text-red-500">Error: {error.message}</p>;
+
+  const userOptions = users.map((u) => ({ value: u.name, label: u.name }));
+  const movieOptions = movies.map((m) => ({ value: m.title, label: m.title }));
 
   return (
     <div className="px-6 py-10">
@@ -127,42 +130,26 @@ export default function Review() {
           onSubmit={handleAddReview}
           className="flex mb-6 gap-4 space-x-6 items-center"
         >
-          <div className="flex flex-col gap-4">
-            <select
-              value={newReview.userName}
-              onChange={(e) =>
-                setNewReview({ ...newReview, userName: e.target.value })
+          <div className="flex flex-col gap-4 w-60">
+            <Select
+              options={userOptions}
+              value={userOptions.find((u) => u.value === newReview.userName)}
+              onChange={(selected) =>
+                setNewReview({ ...newReview, userName: selected.value })
               }
+              placeholder="Select User"
               required
-              className="border border-gray-300 rounded px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-300 w-60"
-            >
-              <option value="" disabled>
-                Select User
-              </option>
-              {users.map((u) => (
-                <option key={u.name} value={u.name}>
-                  {u.name}
-                </option>
-              ))}
-            </select>
+            />
 
-            <select
-              value={newReview.movieTitle}
-              onChange={(e) =>
-                setNewReview({ ...newReview, movieTitle: e.target.value })
+            <Select
+              options={movieOptions}
+              value={movieOptions.find((m) => m.value === newReview.movieTitle)}
+              onChange={(selected) =>
+                setNewReview({ ...newReview, movieTitle: selected.value })
               }
+              placeholder="Select Movie"
               required
-              className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 w-60"
-            >
-              <option value="" disabled>
-                Select Movie
-              </option>
-              {movies.map((m) => (
-                <option key={m.title} value={m.title}>
-                  {m.title}
-                </option>
-              ))}
-            </select>
+            />
           </div>
 
           <textarea
@@ -183,6 +170,7 @@ export default function Review() {
           </button>
         </form>
       </div>
+
       <h2 className="text-2xl font-semibold mb-4">Reviews</h2>
 
       <table className="table-auto w-full border-collapse border border-gray-300 max-w-4xl">

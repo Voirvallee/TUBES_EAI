@@ -1,0 +1,17 @@
+{
+    "name": "analytics-service",
+    "version": "1.0.0",
+    "description": "Microservice for analytics",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "amqplib": "^0.10.8",
+        "apollo-server": "^3.13.0",
+        "axios": "^1.10.0",
+        "dotenv": "^16.5.0",
+        "graphql": "^16.11.0",
+        "mongoose": "^7.8.7"
+    }
+}

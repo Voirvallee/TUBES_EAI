@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   # RabbitMQ for messaging
   rabbitmq:
@@ -12,8 +14,6 @@ services:
   # MongoDB instances for services using Mongo
   mongo-user:
     image: mongo
-    ports:
-      - "27017:27017"
     volumes:
       - mongo_user_data:/data/db
 
@@ -27,10 +27,10 @@ services:
     volumes:
       - mongo_playlist_data:/data/db
 
-  mongo-rating:
+  mongo-analytics:
     image: mongo
     volumes:
-      - mongo_rating_data:/data/db
+      - mongo_analytics_data:/data/db
 
   # PostgreSQL instances for services using Postgres
   postgres-review:
@@ -39,8 +39,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
       POSTGRES_DB: reviewdb
-    ports:
-      - "5432:5432"
     volumes:
       - pg_review_data:/var/lib/postgresql/data
 
@@ -50,8 +48,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
       POSTGRES_DB: historydb
-    ports:
-      - "5433:5432"
     volumes:
       - pg_history_data:/var/lib/postgresql/data
 
@@ -110,15 +106,15 @@ services:
     ports:
       - "4003:4003"
 
-  # Rating Service (MongoDB)
-  rating-service:
-    build: ./rating-service
+  # Analytics Service (MongoDB)
+  analytics-service:
+    build: ./analytics-service
     depends_on:
       - rabbitmq
-      - mongo-rating
+      - mongo-analytics
     environment:
       - PORT=4004
-      - MONGO_URL=mongodb://mongo-rating:27017/ratingdb
+      - MONGO_URL=mongodb://mongo-analytics:27017/analyticsdb
       - RABBITMQ_URL=amqp://rabbitmq
     ports:
       - "4004:4004"
@@ -143,6 +139,6 @@ volumes:
   mongo_user_data:
   mongo_movie_data:
   mongo_playlist_data:
-  mongo_rating_data:
+  mongo_analytics_data:
   pg_review_data:
   pg_history_data:

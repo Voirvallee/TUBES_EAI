@@ -4,6 +4,8 @@ import Sidebar from './components/Sidebar'
 import User from './components/User'
 import Movie from './components/Movie'
 import Review from './components/Review'
+import Playlist from './components/Playlist'
+import Analytic from './components/Analytic'
 
 function App() {
 
@@ -14,7 +16,9 @@ function App() {
         <Routes>
           <Route path='/' element={<User />} />
           <Route path='/movie' element={<Movie />} />
+          <Route path='/playlist' element={<Playlist />} />
           <Route path='/review' element={<Review />} />
+          <Route path='/analytic' element={<Analytic />} />
         </Routes>
       </main>
     </>

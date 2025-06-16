@@ -1,0 +1,16 @@
+type AnalyticsSummary {
+  totalUsers: Int!
+  totalMovies: Int!
+  totalReviews: Int!
+  totalPlaylists: Int!
+}
+
+type TopMovie {
+  movieId: ID!
+  reviewCount: Int!
+}
+
+type Query {
+  systemSummary: AnalyticsSummary!
+  topReviewedMovies(limit: Int!): [TopMovie!]!
+}

@@ -16,7 +16,7 @@ const resolvers = {
   },
   Mutation: {
     addReview: async (_, { userName, movieTitle, content }) => {
-      // Check for inappropriate language
+
       const badLangQuery = `
         query CheckText($input: String!) {
           checkText(input: $input) {
@@ -43,17 +43,14 @@ const resolvers = {
         throw new Error("Review contains inappropriate language");
       }
 
-      // Create the review
       const newReview = await Review.create({ userName, movieTitle, content });
       
       try {
-        // Publish review created event
         await publishReviewCreated(newReview);
         
-        // Create and publish history event
         const historyData = {
-          userId: userName, // Assuming userName can be used as userId
-          movieId: movieTitle, // Assuming movieTitle can be used as movieId
+          userId: userName,
+          movieId: movieTitle,
           watchedAt: new Date().toISOString(),
           reviewId: newReview.id
         };
@@ -62,9 +59,7 @@ const resolvers = {
         
         return newReview;
       } catch (error) {
-        // If event publishing fails, you might want to handle this
         console.error("Error publishing events:", error);
-        // You could choose to delete the review here if event publishing is critical
         throw new Error("Review created but failed to publish events");
       }
     },
