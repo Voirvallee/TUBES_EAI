@@ -141,7 +141,6 @@ const resolvers = {
     },
   },
 
-  // 🔧 🔧 THIS IS THE KEY ADDITION:
   Playlist: {
     id: (parent) => parent._id.toString(),
   },

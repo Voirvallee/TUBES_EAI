@@ -17,9 +17,9 @@ async function connectRabbitMQ() {
     });
     channel = await connection.createChannel();
     await channel.assertExchange(EXCHANGE_NAME, "topic", { durable: false });
-    console.log("✅ RabbitMQ connected");
+    console.log("RabbitMQ connected");
   } catch (err) {
-    console.error("❌ RabbitMQ connection failed:", err.message);
+    console.error("RabbitMQ connection failed:", err.message);
     channel = null;
     throw err; // Throw only for initial setup (resolver handles publish errors)
   }
@@ -36,7 +36,7 @@ async function safePublish(message) {
     );
     return success;
   } catch (err) {
-    console.error("❌ RabbitMQ publish failed:", err.message);
+    console.error("RabbitMQ publish failed:", err.message);
     return false;
   }
 }
@@ -44,9 +44,9 @@ async function safePublish(message) {
 async function publishPlaylistUpdated(playlist) {
   const success = await safePublish(playlist);
   if (success) {
-    console.log(`✅ Published playlist update: ${playlist.id}`);
+    console.log(`Published playlist update: ${playlist.id}`);
   } else {
-    console.warn("⚠️ Playlist update not published (non-critical)");
+    console.warn("Playlist update not published (non-critical)");
   }
 }
 

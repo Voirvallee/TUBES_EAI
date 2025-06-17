@@ -39,9 +39,9 @@ function Analytic() {
     `;
 
     const topMoviesQuery = `
-      query {
-        topReviewedMovies(limit: 5) {
-          movieId
+      query TopReviewedMovies($limit: Int!) {
+        topReviewedMovies(limit: $limit) {
+          movieTitle
           reviewCount
         }
       }
@@ -56,7 +56,10 @@ function Analytic() {
         ),
         axios.post(
           GRAPHQL_URL,
-          { query: topMoviesQuery },
+          {
+            query: topMoviesQuery,
+            variables: { limit: 5 },
+          },
           { headers: { "Content-Type": "application/json" } }
         ),
       ]);
@@ -77,7 +80,6 @@ function Analytic() {
     <div className="overflow-hidden px-6 pt-10">
       <h2 className="text-2xl font-semibold mb-6">System Analytics</h2>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-8 mb-10">
         <div className="p-4 bg-blue-100 rounded shadow">
           <h3 className="text-xl font-semibold">Total Users</h3>
@@ -97,18 +99,15 @@ function Analytic() {
         </div>
       </div>
 
-      {/* Bar Chart */}
       <div className="mb-8">
-        <h3 className="text-2xl font-semibold mb-2">
-          Top Reviewed Movies (Chart)
-        </h3>
+        <h3 className="text-2xl font-semibold mb-2">Top Reviewed Movies</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={topMovies}
             margin={{ top: 10, right: 30, left: 0, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="movieId" />
+            <XAxis dataKey="movieTitle" />
             <YAxis />
             <Tooltip />
             <Legend />

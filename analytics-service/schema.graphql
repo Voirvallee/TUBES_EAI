@@ -6,7 +6,7 @@ type AnalyticsSummary {
 }
 
 type TopMovie {
-  movieId: ID!
+  movieTitle: String!
   reviewCount: Int!
 }
 

@@ -4,5 +4,8 @@
 #root {
   display: flex;
   font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
   overflow-y: hidden;
 }

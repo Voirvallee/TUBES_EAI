@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <Sidebar />
-      <main className='w-full'>
+      <main className='w-full h-screen  overflow-y-auto'>
         <Routes>
           <Route path='/' element={<User />} />
           <Route path='/movie' element={<Movie />} />

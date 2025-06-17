@@ -25,13 +25,13 @@ export default function Review() {
   async function fetchInitialData() {
     try {
       setLoading(true);
-      // Fetch reviews
+      // ✅ Fix the reviews query to match backend schema
       const reviewsQuery = `
         query {
           reviews {
             id
-            userId
-            movieId
+            userName
+            movieTitle
             content
             timestamp
           }
@@ -124,7 +124,7 @@ export default function Review() {
 
   return (
     <div className="px-6 py-10">
-      <h2 className="text-2xl font-semibold mb-4">Add new users</h2>
+      <h2 className="text-2xl font-semibold mb-4">Add new review</h2>
       <div className="border-b-2 border-gray-300 pb-5 mb-10">
         <form
           onSubmit={handleAddReview}
@@ -164,7 +164,7 @@ export default function Review() {
 
           <button
             type="submit"
-            className="self-start bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="self-start bg-blue-500 text-white font-semibold px-4 py-2 rounded hover:bg-blue-600"
           >
             Add Review
           </button>
@@ -178,16 +178,13 @@ export default function Review() {
           <tr className="bg-gray-200">
             <th className="border border-gray-300 px-4 py-2 text-left">ID</th>
             <th className="border border-gray-300 px-4 py-2 text-left">
-              User ID
+              User Name
             </th>
             <th className="border border-gray-300 px-4 py-2 text-left">
-              Movie ID
+              Movie Title
             </th>
             <th className="border border-gray-300 px-4 py-2 text-left">
               Content
-            </th>
-            <th className="border border-gray-300 px-4 py-2 text-left">
-              Timestamp
             </th>
           </tr>
         </thead>
@@ -195,12 +192,11 @@ export default function Review() {
           {reviews.map((r) => (
             <tr key={r.id} className="hover:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{r.id}</td>
-              <td className="border border-gray-300 px-4 py-2">{r.userId}</td>
-              <td className="border border-gray-300 px-4 py-2">{r.movieId}</td>
-              <td className="border border-gray-300 px-4 py-2">{r.content}</td>
+              <td className="border border-gray-300 px-4 py-2">{r.userName}</td>
               <td className="border border-gray-300 px-4 py-2">
-                {new Date(r.timestamp).toLocaleString()}
+                {r.movieTitle}
               </td>
+              <td className="border border-gray-300 px-4 py-2">{r.content}</td>
             </tr>
           ))}
         </tbody>

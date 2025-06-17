@@ -2,8 +2,8 @@ import { NavLink } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <aside className="bg-gray-100 px-8 pt-10 shadow-xs shadow-gray-400 h-screen">
-      <NavLink to={'/'}>
+    <aside className="flex flex-col w-64 sticky left-0 bg-gray-100 px-8 pt-10 shadow-xs shadow-gray-400">
+      <NavLink to={"/"}>
         <h1 className="text-xl font-bold mb-10">Movie Rating Project</h1>
       </NavLink>
       <nav className="flex flex-col gap-2">

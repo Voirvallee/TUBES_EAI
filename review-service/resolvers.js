@@ -1,13 +1,11 @@
 const Review = require("./Reviews");
-const {
-  publishReviewCreated,
-  publishHistoryCreated,
-} = require("./messagePublisher");
+const { publishReviewCreated } = require("./messagePublisher");
 
 const BAD_LANG_API_URL =
-  "https://stroke-belize-publicity-chart.trycloudflare.com/graphql";
+  "https://protocols-donna-jpg-programme.trycloudflare.com";
 
-const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const resolvers = {
   Query: {
@@ -16,7 +14,6 @@ const resolvers = {
   },
   Mutation: {
     addReview: async (_, { userName, movieTitle, content }) => {
-
       const badLangQuery = `
         query CheckText($input: String!) {
           checkText(input: $input) {
@@ -34,33 +31,29 @@ const resolvers = {
       const badLangResponse = await fetch(BAD_LANG_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: badLangQuery, variables: { input: content } }),
+        body: JSON.stringify({
+          query: badLangQuery,
+          variables: { input: content },
+        }),
       });
 
       const badLangResult = await badLangResponse.json();
 
-      if (badLangResult.data?.checkText && badLangResult.data.checkText.length > 0) {
+      if (
+        badLangResult.data?.checkText &&
+        badLangResult.data.checkText.length > 0
+      ) {
         throw new Error("Review contains inappropriate language");
       }
 
       const newReview = await Review.create({ userName, movieTitle, content });
-      
+
       try {
         await publishReviewCreated(newReview);
-        
-        const historyData = {
-          userId: userName,
-          movieId: movieTitle,
-          watchedAt: new Date().toISOString(),
-          reviewId: newReview.id
-        };
-        
-        await publishHistoryCreated(historyData);
-        
         return newReview;
       } catch (error) {
-        console.error("Error publishing events:", error);
-        throw new Error("Review created but failed to publish events");
+        console.error("Error publishing event:", error);
+        throw new Error("Review created but failed to publish event");
       }
     },
   },

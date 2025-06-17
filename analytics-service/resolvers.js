@@ -25,7 +25,6 @@ const resolvers = {
         totalPlaylists: playlistsRes.data.data.playlists.length,
       };
 
-      // ✅ Save the snapshot to MongoDB
       await Analytics.create({
         type: "system-summary",
         data: summary,
@@ -35,17 +34,18 @@ const resolvers = {
     },
 
     topReviewedMovies: async (_, { limit }) => {
-      const reviewQuery = `{ reviews { movieId } }`;
+      const reviewQuery = `{ reviews { movieTitle } }`;
       const res = await axios.post(REVIEW_SERVICE_URL, { query: reviewQuery });
       const reviews = res.data.data.reviews;
 
       const countMap = {};
       for (const review of reviews) {
-        countMap[review.movieId] = (countMap[review.movieId] || 0) + 1;
+        const title = review.movieTitle;
+        countMap[title] = (countMap[title] || 0) + 1;
       }
 
       const topMovies = Object.entries(countMap)
-        .map(([movieId, count]) => ({ movieId, reviewCount: count }))
+        .map(([movieTitle, count]) => ({ movieTitle, reviewCount: count }))
         .sort((a, b) => b.reviewCount - a.reviewCount)
         .slice(0, limit);
 

@@ -5,11 +5,15 @@ const EXCHANGE_NAME = "topic_logs";
 const ROUTING_KEY = "review.created";
 
 let channel;
+let connection;
 
 async function connectRabbitMQ() {
   if (channel) return channel;
+
   try {
-    const connection = await amqp.connect(process.env.RABBITMQ_URL);
+    connection = await amqp.connect(
+      process.env.RABBITMQ_URL || "amqp://rabbitmq"
+    );
     channel = await connection.createChannel();
     await channel.assertExchange(EXCHANGE_NAME, "topic", { durable: false });
     console.log("Connected to RabbitMQ");
@@ -23,18 +27,29 @@ async function connectRabbitMQ() {
 async function publishReviewCreated(review) {
   try {
     if (!channel) await connectRabbitMQ();
-    const msg = JSON.stringify({
+
+    const message = {
       id: review.id,
-      userId: review.userId,
-      movieId: review.movieId,
+      userName: review.userName,
+      movieTitle: review.movieTitle,
       content: review.content,
       timestamp: review.timestamp,
-    });
-    channel.publish(EXCHANGE_NAME, ROUTING_KEY, Buffer.from(msg));
-    console.log(`Published review.created event: ${msg}`);
+    };
+
+    const msgBuffer = Buffer.from(JSON.stringify(message));
+
+    channel.publish(EXCHANGE_NAME, ROUTING_KEY, msgBuffer);
+    console.log(
+      `Published review.created event: ${JSON.stringify(message)}`
+    );
   } catch (error) {
     console.error("Failed to publish review.created event:", error);
   }
 }
 
-module.exports = { publishReviewCreated, connectRabbitMQ };
+process.on("SIGINT", async () => {
+  if (connection) await connection.close();
+  process.exit(0);
+});
+
+module.exports = { publishReviewCreated };

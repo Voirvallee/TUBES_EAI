@@ -8,14 +8,14 @@ type Review {
   id: ID!
 
   """
-  ID of the user who wrote the review.
+  Name of the user who wrote the review.
   """
-  userId: ID!
+  userName: String!
 
   """
-  ID of the movie being reviewed.
+  Title of the movie being reviewed.
   """
-  movieId: ID!
+  movieTitle: String!
 
   """
   The content/text of the review.
@@ -26,9 +26,6 @@ type Review {
   Timestamp when the review was created or submitted (ISO 8601 string).
   """
   timestamp: String
-
-  userName: String
-  movieTitle: String 
 }
 
 type Query {
